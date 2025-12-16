@@ -158,9 +158,22 @@ if ticker:
     st.markdown(css_styles, unsafe_allow_html=True)
 
     # Load and Encode Logo
-    # Load and Encode Logo
-    # Using text fallback for cloud deployment until image is added to repo assets
-    logo_html = '<h2 style="color: #4CAF50;">VD Financials</h2>'
+    logo_html = ""
+    try:
+        import os
+        import base64
+        # Relative path to logo in the same directory as app.py
+        logo_path = os.path.join(os.path.dirname(__file__), 'logo.png')
+
+        if os.path.exists(logo_path):
+            with open(logo_path, "rb") as f:
+                encoded_image = base64.b64encode(f.read()).decode()
+            # Thinner logo (75px), trimmed watermark
+            logo_html = f'<img src="data:image/png;base64,{encoded_image}" style="height: 75px; object-fit: contain; clip-path: inset(0px 30px 0px 0px); {logo_filter}">'
+        else:
+            logo_html = '<h2 style="color: #4CAF50;">VD Financials</h2>'
+    except Exception:
+        logo_html = '<h2 style="color: #4CAF50;">VD Financials</h2>'
 
     # Sticky Header
     price_color = "green" if price_change >= 0 else "red"
