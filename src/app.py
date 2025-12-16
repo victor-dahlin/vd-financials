@@ -17,9 +17,47 @@ importlib.reload(analysis)
 st.set_page_config(page_title="VD Financials", layout="wide")
 
 
-# Sidebar
-st.sidebar.header("Configuration")
-ticker = st.sidebar.text_input("Enter Stock Ticker", value="AAPL").upper()
+ticker_input = st.sidebar.text_input("Enter Stock Ticker (Symbol)", value="AAPL").upper()
+exchange_mode = st.sidebar.selectbox("Exchange / Region", options=["Auto-Detect", "US (No Suffix)", "Sweden (.ST)", "Denmark (.CO)"], index=0)
+
+suffix_map = {
+    "US (No Suffix)": "",
+    "Sweden (.ST)": ".ST",
+    "Denmark (.CO)": ".CO"
+}
+
+ticker = ticker_input # fallback
+
+if ticker_input:
+    resolved_ticker = None
+    
+    if exchange_mode == "Auto-Detect":
+        # Try common suffixes in order
+        candidates = [ticker_input, f"{ticker_input}.ST", f"{ticker_input}.CO"]
+        
+        # We need a way to check validity without expensive full fetch if possible, 
+        # but fetch_history is cached so we can just use it.
+        # We'll use a placeholder for validity check.
+        for cand in candidates:
+            # We use a 1d check to be fast
+            check_data = StockDataLoader.fetch_history(cand, period="1d", interval="1d")
+            if not check_data.empty:
+                resolved_ticker = cand
+                break
+        
+        if not resolved_ticker:
+             # Default to input if none found (will show error later)
+             resolved_ticker = ticker_input
+             
+    else:
+        resolved_ticker = f"{ticker_input}{suffix_map[exchange_mode]}"
+
+    ticker = resolved_ticker
+
+    # Display resolved ticker if different
+    if ticker != ticker_input and "Auto" in exchange_mode:
+        st.sidebar.info(f"Resolved to: **{ticker}**")
+
 period = st.sidebar.selectbox("Period", options=["1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "max"], index=5)
 
 # Indicators
