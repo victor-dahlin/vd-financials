@@ -14,8 +14,7 @@ import analysis
 import importlib
 importlib.reload(analysis)
 
-logo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logo.png')
-st.set_page_config(page_title="VD Financials", page_icon=logo_path, layout="wide")
+st.set_page_config(page_title="VD Financials", page_icon="📈", layout="wide")
 
 
 ticker_input = st.sidebar.text_input("Enter Stock Ticker (Symbol)", value="AAPL").upper()
@@ -214,7 +213,7 @@ if ticker:
             with open(logo_path, "rb") as f:
                 encoded_image = base64.b64encode(f.read()).decode()
             # Thinner logo (75px), trimmed watermark
-            logo_html = f'<img src="data:image/png;base64,{encoded_image}" style="height: 75px; object-fit: contain; {logo_filter}">'
+            logo_html = f'<img src="data:image/png;base64,{encoded_image}" style="height: 75px; object-fit: contain; clip-path: inset(0px 30px 0px 0px); {logo_filter}">'
         else:
             logo_html = '<h2 style="color: #4CAF50;">VD Financials</h2>'
     except Exception:
