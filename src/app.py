@@ -1,14 +1,16 @@
 import streamlit as st
+
+# Page Config must be the first Streamlit command
+st.set_page_config(page_title="VD Financials", page_icon="📈", layout="wide")
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas as pd
 import yfinance as yf
 from data_loader import StockDataLoader
 import analysis
-import importlib
-importlib.reload(analysis)
+# Reload mechanism removed for production stability
 
-st.set_page_config(page_title="VD Financials", layout="wide")
+# Config moved to top
 
 
 # Sidebar
