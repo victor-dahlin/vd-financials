@@ -14,7 +14,8 @@ import analysis
 import importlib
 importlib.reload(analysis)
 
-st.set_page_config(page_title="VD Financials", layout="wide")
+logo_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logo.png')
+st.set_page_config(page_title="VD Financials", page_icon=logo_path, layout="wide")
 
 
 ticker_input = st.sidebar.text_input("Enter Stock Ticker (Symbol)", value="AAPL").upper()
