@@ -214,7 +214,7 @@ if ticker:
             with open(logo_path, "rb") as f:
                 encoded_image = base64.b64encode(f.read()).decode()
             # Thinner logo (75px), trimmed watermark
-            logo_html = f'<img src="data:image/png;base64,{encoded_image}" style="height: 75px; object-fit: contain; clip-path: inset(0px 30px 0px 0px); {logo_filter}">'
+            logo_html = f'<img src="data:image/png;base64,{encoded_image}" style="height: 75px; object-fit: contain; {logo_filter}">'
         else:
             logo_html = '<h2 style="color: #4CAF50;">VD Financials</h2>'
     except Exception:
